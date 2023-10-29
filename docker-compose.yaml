@@ -1,0 +1,39 @@
+services:
+ jenkins:
+  container_name: jenkins
+  image: jenkins/jenkins
+  ports:
+   - 8085:8080
+  volumes:
+   - jenkins_vol:/var/jenkins_home/
+  networks:
+   - net
+
+ ssh-server:
+  container_name: remote-host
+  build:
+    context: /home/jenkins/ssh-container
+    dockerfile: Dockerfile  # Specify the Dockerfile if necessary
+  ports:
+   - 2022:22
+  networks:
+   - net
+ db-server:
+  container_name: db
+  volumes:
+   - db_vol:/var/lib/mysql
+  image: mysql
+  ports:
+   - 3309:3306
+  environment:
+   MYSQL_ROOT_PASSWORD: redhat@123
+  networks:
+   - net
+
+
+networks:
+ net:
+volumes:
+ db_vol:
+ jenkins_vol:
+ 
